@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// TODO realizar corrção das rotas
+Route::redirect( "/", "/home" );
+Route::redirect( "/js/popper.js.map", "/Dashboard" );
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

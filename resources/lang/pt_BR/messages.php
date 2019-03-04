@@ -1,6 +1,7 @@
 <?php
 
 return [
-    'email' => 'E-Mail Address',
-    'password' => 'Password'
+    'login' => 'Faça o login para acessar sua área exclusiva.',
+    'password' => 'Senha',
+    'createUser' => 'Criar novo usuário'
 ];

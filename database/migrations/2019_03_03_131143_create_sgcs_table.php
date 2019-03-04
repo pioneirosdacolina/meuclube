@@ -17,7 +17,13 @@ class CreateSgcsTable extends Migration
             $table->increments('id');
             $table->integer( 'codigo_usuario' );
             $table->string('nome', 255 );
-            $table->enum('cargo', [ 'DESBRAVADOR', 'INSTRUTOR', 'ANCIÃO', 'CONSELHEIRO', 'APOIO', 'FILHO DIRETORIA (0 A 9 ANOS)', 'SECRETÁRIO DO CLUBE', 'CONSELHEIRO ASSOCIADO', 'COZINHEIRO DO CLUBE', 'SEGURANÇA DO CLUBE', 'CAPELÃO DO CLUBE', 'DIRETOR ASSOCIADO', 'TESOUREIRO DO CLUBE', 'PROFISSIONAL DE SAÚDE', 'DIRETOR DE CLUBE' ] );
+            $table->enum('cargo', [
+                'DESBRAVADOR',
+                'INSTRUTOR',
+                'ANCIÃO',
+                'CONSELHEIRO',
+                'APOIO',
+                'FILHO DIRETORIA (0 A 9 ANOS)', 'SECRETÁRIO DO CLUBE', 'CONSELHEIRO ASSOCIADO', 'COZINHEIRO DO CLUBE', 'SEGURANÇA DO CLUBE', 'CAPELÃO DO CLUBE', 'DIRETOR ASSOCIADO', 'TESOUREIRO DO CLUBE', 'PROFISSIONAL DE SAÚDE', 'DIRETOR DE CLUBE' ] );
             $table->string('lider', 1 );
             $table->enum('estado_civil', [ 'SOLTEIRO', 'CASADO', 'VIÚVO', 'NÃO INFORMADO' ] );
             $table->string('data_nascimento', 10 );
