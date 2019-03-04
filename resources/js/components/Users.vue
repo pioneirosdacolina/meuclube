@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container"  v-if="$gate.isDiretoria()">
         <div class="row mt-5">
             <div class="col-md-12">
                 <div class="card">
@@ -20,15 +20,15 @@
                                 <th>E-mail</th>
                                 <th>Type</th>
                                 <th>Registered At</th>
-                                <th>Modify</th>
+                                <th v-if="$gate.isDiretoria()">Modify</th>
                             </tr>
                             <tr v-for="user in users" :key="user.id" >
                                 <td>{{ user.id }}</td>
                                 <td>{{ user.name }}</td>
                                 <td>{{ user.email }}</td>
-                                <td>{{ user.type | upText }}</td>
+                                <td>{{ user.role | upText }}</td>
                                 <td>{{ user.created_at | myDate }}</td>
-                                <td>
+                                <td v-if="$gate.isDiretoria()">
                                     <a href="#" @click="editUser( user )">
                                         <i class="fa fa-edit blue"></i>
                                     </a>
@@ -169,8 +169,12 @@
                 $( '#addNewModal' ).modal( 'show' );
             },
             loadUsers(){
-                axios.get('api/user')
-                    .then( ({ data }) => ( this.users = data.data ) );
+                if( this.$gate.isDiretoria() ){
+                    axios.get('api/user')
+                        .then( ({ data }) => ( this.users = data.data ) );
+                }else{
+                    this.$router.push('/boasVindas');
+                }
             },
             updateUser(){
                 this.form.put( 'api/user/' + this.form.id )

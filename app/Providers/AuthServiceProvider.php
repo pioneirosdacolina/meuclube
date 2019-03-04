@@ -70,6 +70,15 @@ class AuthServiceProvider extends ServiceProvider
             return $user->role === 'administrador';
         });
 
+        Gate::define('isDiretoria', function ( $user ){
+            return $user->role === 'anciao'
+                || $user->role === 'tesoureiro'
+                || $user->role === 'secretaria'
+                || $user->role === 'diretor_assoc'
+                || $user->role === 'diretor'
+                || $user->role === 'administrador';
+        });
+
         Passport::routes();
         //
     }

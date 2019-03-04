@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12 mt-3">
                 <div class="card">
-                    <div class="card-header">Olá {{nome}}!</div>
+                    <div class="card-header">Olá {{$gate.getNome()}}!</div>
 
                     <div class="card-body">
                         <p>

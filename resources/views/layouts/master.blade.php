@@ -79,7 +79,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <router-link to="/preInscricao" class="nav-link">
                 <i class="nav-icon fas fa-address-card"></i>
                 <p>
-                  Boas Vindas
+                  Pr&eacute; Inscri&ccedil;&atilde;o
                 </p>
               </router-link>
             </li>
@@ -175,6 +175,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
   {{--</footer>--}}
 </div>
 <!-- ./wrapper -->
+
+@auth
+<script>
+  window.user = @json(auth()->user())
+</script>
+@endauth
 
 <script src="/js/app.js"></script>
 </body>
