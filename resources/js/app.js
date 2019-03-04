@@ -49,6 +49,8 @@ Vue.component(
 );
 
 let routes = [
+    { path: '/preInscricao', component: require('./components/PreInscricao.vue').default },
+    { path: '/boasVindas', component: require('./components/BoasVindas.vue').default },
     { path: '/developer', component: require('./components/Developer.vue').default },
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/users', component: require('./components/Users.vue').default },

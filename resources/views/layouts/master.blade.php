@@ -65,8 +65,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
+          @if( Gate::check('isVisitante') )
+          <li class="nav-item">
+            <router-link to="/boasVindas" class="nav-link">
+              <i class="nav-icon fas fa-home"></i>
+              <p>
+                Boas Vindas
+              </p>
+            </router-link>
+          </li>
+          @endif
+            <li class="nav-item">
+              <router-link to="/preInscricao" class="nav-link">
+                <i class="nav-icon fas fa-address-card"></i>
+                <p>
+                  Boas Vindas
+                </p>
+              </router-link>
+            </li>
+          @if(Gate::check('isAdministrador') || Gate::check('isSecretaria'))
           <li class="nav-item">
             <router-link to="/dashboard" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -104,6 +121,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <p>Developer</p>
             </router-link>
           </li>
+          @endif
+          @if(Gate::check('isAdministrador') || Gate::check('isSecretaria') || Gate::check('isVisitante'))
           <li class="nav-item">
             <router-link to="/profile" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
@@ -112,6 +131,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </router-link>
           </li>
+          @endif
           <li class="nav-item">
             <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
               <i class="nav-icon fas fa-power-off"></i>
