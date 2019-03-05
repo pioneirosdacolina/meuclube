@@ -21,4 +21,8 @@ Route::apiResources([
     '/user' => 'API\UserController'
 ]);
 
+Route::apiResources([
+    '/membro' => 'API\MembroController'
+]);
+
 Route::get( 'profile', 'API\UserController@profile');

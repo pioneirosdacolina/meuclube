@@ -60,4 +60,8 @@ export default class Gate {
     getNome(){
         return this.user.name;
     }
+
+    getId(){
+        return this.user.id;
+    }
 }

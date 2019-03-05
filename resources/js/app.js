@@ -7,6 +7,8 @@ import { Form, HasError, AlertError } from 'vform'
 import VueRouter from 'vue-router'
 import VueProgressBar from 'vue-progressbar'
 
+import Inputmask from 'inputmask'
+
 import Gate from './Gate'
 
 Vue.prototype.$gate = new Gate( window.user );
@@ -21,12 +23,34 @@ const toast = swal.mixin({
     timer: 3000
 });
 
+const unidades = {
+    'F': {
+        '10' : 'Gato do Mato',
+        '11' : 'Jaguatirica',
+        '12' : 'Lince',
+        '13' : 'Suçuarana',
+        '14' : 'Onça Pintada',
+        '15' : 'Tigre'
+    },
+    'M': {
+        '10' : 'Jaguar',
+        '11' : 'Pantera Negra',
+        '12' : 'Guepardo',
+        '13' : 'Leopardo das Neves',
+        '14' : 'Puma',
+        '15' : 'Leão'
+    }
+};
+
+window.unidades = unidades;
+
 window.toast = toast;
 
 window.Form = Form;
 
 window.Fire = new Vue();
 
+Vue.use( Inputmask )
 Vue.use(VueRouter)
 Vue.use( VueProgressBar, {
     color: 'rgb(143, 255, 199)',
@@ -54,6 +78,7 @@ Vue.component(
 
 let routes = [
     { path: '/preInscricao', component: require('./components/PreInscricao.vue').default },
+    { path: '/adicionarMembro', component: require('./components/preInscricao/AdicionarMembro.vue').default },
     { path: '/boasVindas', component: require('./components/BoasVindas.vue').default },
     { path: '/developer', component: require('./components/Developer.vue').default },
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },

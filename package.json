@@ -14,7 +14,6 @@
         "axios": "^0.18.0",
         "bootstrap": "^4.0.0",
         "cross-env": "^5.1",
-        "jquery": "^3.2",
         "laravel-mix": "^4.0.7",
         "lodash": "^4.17.5",
         "popper.js": "^1.14.7",
@@ -26,6 +25,8 @@
     },
     "dependencies": {
         "admin-lte": "^3.0.0-alpha.2",
+        "inputmask": "^4.0.6",
+        "jquery": "^3.3.1",
         "moment": "^2.24.0",
         "sweetalert2": "^8.2.6",
         "vform": "^1.0.0",

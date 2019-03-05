@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\DadosPessoais::class, function (Faker $faker) {
+$factory->define(App\Imagem::class, function (Faker $faker) {
     return [
         //
     ];
