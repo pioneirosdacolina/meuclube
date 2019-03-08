@@ -37,4 +37,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getRole(){
+        return $this->role;
+    }
+
+    public function isDiretoria(){
+        return $this->role === 'anciao'
+            || $this->role === 'tesoureiro'
+            || $this->role === 'secretaria'
+            || $this->role === 'diretor_assoc'
+            || $this->role === 'diretor'
+            || $this->role === 'administrador';
+    }
 }

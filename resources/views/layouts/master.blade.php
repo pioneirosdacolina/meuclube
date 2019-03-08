@@ -44,10 +44,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="http://www.pioneirosdacolina.com.br" class="brand-link">
       <img src="./img/logo.png" alt="LaraStart Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">
-      <span class="brand-text font-weight-light">Lara Start</span>
+      <span class="brand-text font-weight-light">Meu Clube</span>
     </a>
 
     <!-- Sidebar -->
@@ -122,16 +122,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </router-link>
           </li>
           @endif
-          @if(Gate::check('isAdministrador') || Gate::check('isSecretaria') || Gate::check('isVisitante'))
-          <li class="nav-item">
-            <router-link to="/profile" class="nav-link">
-              <i class="nav-icon fas fa-user"></i>
-              <p>
-                Profile
-              </p>
-            </router-link>
-          </li>
-          @endif
+          {{--@if(Gate::check('isAdministrador') || Gate::check('isSecretaria') || Gate::check('isVisitante'))--}}
+          {{--<li class="nav-item">--}}
+            {{--<router-link to="/profile" class="nav-link">--}}
+              {{--<i class="nav-icon fas fa-user"></i>--}}
+              {{--<p>--}}
+                {{--Profile--}}
+              {{--</p>--}}
+            {{--</router-link>--}}
+          {{--</li>--}}
+          {{--@endif--}}
           <li class="nav-item">
             <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
               <i class="nav-icon fas fa-power-off"></i>
@@ -181,6 +181,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   window.user = @json(auth()->user())
 </script>
 @endauth
+
 
 <script src="/js/app.js"></script>
 </body>

@@ -67,8 +67,23 @@ Vue.component(
 );
 
 Vue.component(
+    'tabela-membros',
+    require('./components/TabelaMembros.vue').default
+);
+
+Vue.component(
     'passport-authorized-clients',
     require('./components/passport/AuthorizedClients.vue').default
+);
+
+Vue.component(
+    'inscricao-responsaveis',
+    require('./components/preInscricao/Responsaveis.vue').default
+);
+
+Vue.component(
+    'contatos',
+    require('./components/Contatos.vue').default
 );
 
 Vue.component(
@@ -98,6 +113,17 @@ Vue.filter( 'upText', function( text ){
 Vue.filter( 'myDate', function( created ){
     return moment( created ).format('MMMM Do YYYY');
 });
+
+Vue.filter( 'situacaoDesbravador', function ( sit ) {
+    let situacao = 'Incompleta';
+
+    switch ( sit ) {
+        case '':
+
+    }
+
+    return sit;
+} );
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
