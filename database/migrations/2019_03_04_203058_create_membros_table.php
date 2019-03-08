@@ -30,6 +30,7 @@ class CreateMembrosTable extends Migration
             $table->unsignedInteger('img_certidao_id')->nullable();
             $table->unsignedInteger( 'user_create')->nullable();
             $table->unsignedInteger( 'user_id')->nullable();
+            $table->enum('situacao', ['incompleto', 'documentos_pendentes', 'doc_pendete_conferencia', 'completo'])->default('incompleto');
             $table->timestamps();
 
              $table->foreign('user_create')->references('id')->on('users');
