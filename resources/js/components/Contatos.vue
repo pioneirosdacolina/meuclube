@@ -161,6 +161,7 @@
 
             alterarOrigemId( origemId ){
                 this.origemId = origemId;
+                this.contatos.filter( ( contato ) => { contato.origem_id = this.origemId } );
                 console.log( { component: this.tipo, newOrigemId: this.origemId } );
             },
 

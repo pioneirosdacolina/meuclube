@@ -1974,7 +1974,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     alterarOrigemId: function alterarOrigemId(origemId) {
+      var _this6 = this;
+
       this.origemId = origemId;
+      this.contatos.filter(function (contato) {
+        contato.origem_id = _this6.origemId;
+      });
       console.log({
         component: this.tipo,
         newOrigemId: this.origemId
@@ -1992,17 +1997,17 @@ __webpack_require__.r(__webpack_exports__);
     console.log('Component mounted.');
   },
   created: function created() {
-    var _this6 = this;
+    var _this7 = this;
 
     this.carregarContatos();
     Fire.$on("saveContatos", function () {
-      _this6.saveContato(_this6.contatos);
+      _this7.saveContato(_this7.contatos);
     });
     Fire.$on("alterarOrigemESalvarContatos", function (origemId) {
-      _this6.origemId = origemId;
+      _this7.origemId = origemId;
       console.log('Novo origemId:' + origemId);
 
-      _this6.saveContato(_this6.contatos);
+      _this7.saveContato(_this7.contatos);
     });
   }
 });
