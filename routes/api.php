@@ -18,24 +18,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::apiResources([
-    '/user' => 'API\UserController'
+    'user' => 'API\UserController',
+    'membro' => 'API\MembroController',
+    'responsavel' => 'API\ResponsavelController',
+    'contato' => 'API\ContatoController'
 ]);
 
-Route::apiResources([
-    '/membro' => 'API\MembroController'
-]);
-
-Route::apiResources([
-    '/contato' => 'API\ContatoController'
-]);
 
 Route::get( 'profile', 'API\UserController@profile');
-Route::get( '/contato/{origem}/{tipo}/{id}', 'API\ContatoController@index');
+Route::get( 'contato/{origem}/{tipo}/{id}', 'API\ContatoController@index' );
 
-Route::get( 'membro/escolariadade/{id}', 'API\MembroController@getEscolaridade');
-Route::post( 'membro/escolariadade', 'API\MembroController@createEscolaridade');
-Route::put( 'membro/escolariadade/{id}', 'API\MembroController@saveEscolaridade');
+Route::get( 'membro/escolariadade/{id}', 'API\MembroController@getEscolaridade' );
+Route::get( 'membro/endereco/{id}', 'API\MembroController@getEndereco' );
 
-Route::get( 'membro/endereco/{id}', 'API\MembroController@getEndereco');
-Route::post( 'membro/endereco', 'API\MembroController@createEndereco');
-Route::put( 'membro/endereco/{id}', 'API\MembroController@saveEndereco');
+Route::put( 'membro/escolariadade/{id}', 'API\MembroController@saveEscolaridade' );
+Route::put( 'membro/endereco/{id}', 'API\MembroController@saveEndereco' );
+
+Route::post( 'membro/endereco', 'API\MembroController@createEndereco' );
+Route::post( 'membro/escolariadade', 'API\MembroController@createEscolaridade' );

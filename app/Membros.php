@@ -13,4 +13,8 @@ class Membros extends Model
     protected $dateFormat = 'Y-m-d';
 
     public $timestamps = false;
+
+    public function responsaveis(){
+        return $this->hasMany('App\ResponsavelMembro');
+    }
 }

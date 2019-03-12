@@ -20,18 +20,20 @@
         props:{
             title: String,
             origem: String,
-            tipo: String,
-            origemId: Number
+            tipo: String
         },
 
         data(){
             return {
+                origemId: 0,
                 contatos:[]
             }
         },
 
         methods : {
             removerContato( contato ){
+                console.log('TODO colocar alerta confirmando a exclusão do contato.');
+
                 contato.isDeleted = true;
                 if( !contato.isNovo ){
 
@@ -43,7 +45,9 @@
                                 "success"
                             );
                         } )
-                        .catch(({data}) =>{
+                        .catch(({ e }) => {
+
+                            console.log(e);
                             toast.fire(
                                 "Erro",
                                 "Erro ao apagar " + this.title.toLowerCase() + ".",
@@ -57,7 +61,7 @@
             },
 
             adicionaContato(){
-                this.contatos.push( new Form({
+                let contato = new Form({
                     id: 0,
                     origem: this.origem,
                     origem_id: this.origemId,
@@ -65,16 +69,24 @@
                     contato:'',
                     isNovo: true,
                     isDeleted: false
-                }));
+                });
+
+                contato.origem_id = this.origemId;
+
+                this.contatos.push( contato );
             },
 
             carregarContatos(){
                 this.contatos = [];
-                axios.get('api/contato/' + this.origem + '/' +  this.tipo + '/' + this.origemId)
-                    .then( ({ data }) => { data.filter( (contato) => { this.populateContato( contato ) } );
-
-                        if( this.contatos.length == 0 ){ this.adicionaContato(); }
-                    } );
+                if(this.origemId && this.origemId > 0 ){
+                    axios.get('api/contato/' + this.origem + '/' +  this.tipo + '/' + this.origemId)
+                        .then( ({ data }) => {
+                            data.filter( (contato) => { this.populateContato( contato ) } );
+                            if( this.contatos.length == 0 ){ this.adicionaContato(); }
+                        } );
+                }else{
+                    if( this.contatos.length == 0 ){ this.adicionaContato(); }
+                }
             },
 
             populateContato( contato ){
@@ -93,8 +105,12 @@
                 this.contatos.push( fContato );
             },
 
+            saveAllContatos(){
+                this.saveContato( this.contatos );
+            },
+
             saveContato( contatos ){
-                let inserts = contatos.filter( (contato) => { return ( contato.isNovo && !contato.isDeleted ) } );
+                let inserts = contatos.filter( (contato) => { return ( contato.isNovo && !contato.isDeleted && contato.contato.length > 0 ) } );
                 let updates = contatos.filter( (contato) => { return ( !contato.isNovo && !contato.isDeleted ) } );
 
                 inserts.filter( ( contato ) => this.insertContato( contato ) );
@@ -112,7 +128,9 @@
                             "success"
                         );
                     })
-                    .catch((data)=>{
+                    .catch(({ e }) => {
+                        console.log(e);
+
                         toast.fire(
                             "Erro",
                             "Erro ao salvar " + this.title.toLowerCase() + ".",
@@ -131,14 +149,21 @@
                             "success"
                         );
                     })
-                    .catch((data)=>{
+                    .catch(({ e }) => {
+                        console.log(e);
                         toast.fire(
                             "Erro",
                             "Erro ao salvar " + this.title.toLowerCase() + ".",
                             "warning"
                         );
                     });
-            }
+            },
+
+            alterarOrigemId( origemId ){
+                this.origemId = origemId;
+                console.log( { component: this.tipo, newOrigemId: this.origemId } );
+            },
+
         },
         computed:{
             filteredContatos(){
@@ -154,6 +179,13 @@
         created() {
             this.carregarContatos();
             Fire.$on( "saveContatos", () => {
+                this.saveContato( this.contatos );
+            } );
+            Fire.$on( "alterarOrigemESalvarContatos", ( origemId ) => {
+                this.origemId = origemId;
+
+                console.log( 'Novo origemId:' + origemId );
+
                 this.saveContato( this.contatos );
             } );
         }

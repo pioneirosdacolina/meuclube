@@ -128,7 +128,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="dataNascimento">RG</label>
+                                        <label for="rg">RG</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" id="rg"
                                                    placeholder="RG" v-model="dadosBasicos.rg"

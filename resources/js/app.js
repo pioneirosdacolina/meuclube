@@ -114,6 +114,21 @@ Vue.filter( 'myDate', function( created ){
     return moment( created ).format('MMMM Do YYYY');
 });
 
+Vue.filter( 'descricaoParentesco', function ( parentesco ) {
+    switch( parentesco ) {
+        case "pai": return 'Pai';
+        case "mae": return "M\u00E3e";
+        case "a_avo": return 'Av\u00F3';
+        case "o_avo": return 'Av\u00F4';
+        case "tio": return 'Tio';
+        case "tia": return 'Tia';
+        case "padastro": return 'Padastro';
+        case "madastra": return 'Madastra';
+        default: return 'Outros';
+    }
+
+})
+
 Vue.filter( 'situacaoDesbravador', function ( sit ) {
     let situacao = 'Incompleta';
 
