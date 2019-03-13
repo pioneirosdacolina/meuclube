@@ -21,6 +21,7 @@
                             <li class="nav-item"><a @click="etapa = 'escolaridade'" class="nav-link" id="navEscolaridade" :class="{ active: etapa === 'escolaridade', disabled: !etapas.escolaridade }" href="#escolaridade" data-toggle="tab">Escolaridade</a></li>
                             <li class="nav-item"><a @click="etapa = 'contatos'" class="nav-link" id="navContatos" :class="{ active: etapa === 'contatos', disabled: !etapas.contatos }" href="#contatos" data-toggle="tab">Contatos</a></li>
                             <li class="nav-item"><a @click="carregarResponsavel" class="nav-link" id="navResponsaveis" :class="{ active: etapa === 'responsaveis', disabled: !etapas.responsaveis }" href="#responsaveis" data-toggle="tab">Respons&aacute;veis</a></li>
+                            <li class="nav-item"><a @click="carregarInformacoesAdicionais" class="nav-link" id="navInformacoesAdicionais" :class="{ active: etapa === 'informacoesAdicionais', disabled: !etapas.informacoesAdicionais }" href="#informacoesAdicionais" data-toggle="tab">Informa&ccedil;&otilde;es Adicionais</a></li>
                             <li class="nav-item"><a @click="etapa = 'fichadesaude'" class="nav-link" id="navFichadesaude" :class="{ active: etapa === 'fichadesaude', disabled: !etapas.fichadesaude }" href="#fichadesaude" data-toggle="tab">Ficha de Sa&uacute;de</a></li>
                             <li class="nav-item"><a @click="etapa = 'documentacao'" class="nav-link" id="navDocumentacao" :class="{ active: etapa === 'documentacao', disabled: !etapas.documentacao }" href="#documentacao" data-toggle="tab">Documenta&ccedil;&atilde;o</a></li>
                         </ul>
@@ -304,6 +305,12 @@
                             </div>
                             <!-- /.tab-pane -->
 
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" :class="{ active: etapa === 'informacoesAdicionais' }" id="informacoesAdicionais"v-show="etapa == 'informacoesAdicionais'">
+                                <informacoes-adicionais></informacoes-adicionais>
+                            </div>
+                            <!-- /.tab-pane -->
+
                             <div class="tab-pane" :class="{ active: etapa === 'fichadesaude' }" id="fichadesaude"v-show="etapa == 'fichadesaude'">
                             </div>
                             <!-- /.tab-pane -->
@@ -339,6 +346,7 @@
                     escolaridade: false,
                     contatos: false,
                     responsaveis: false,
+                    informacoesAdicionais: false,
                     fichadesaude: false,
                     documentacao: false
                 },
@@ -427,6 +435,11 @@
 
             carregarResponsavel(){
                 this.etapa = 'responsaveis';
+                Fire.$emit( 'carregarResponsaveis', this.membro );
+            },
+
+            carregarInformacoesAdicionais(){
+                this.etapa = 'informacoesAdicionais';
                 Fire.$emit( 'carregarResponsaveis', this.membro );
             },
 

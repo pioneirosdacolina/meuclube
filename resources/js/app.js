@@ -82,6 +82,11 @@ Vue.component(
 );
 
 Vue.component(
+    'informacoes-adicionais',
+    require('./components/preInscricao/InformcoesAdicionais.vue').default
+);
+
+Vue.component(
     'contatos',
     require('./components/Contatos.vue').default
 );

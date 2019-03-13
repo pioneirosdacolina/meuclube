@@ -17,4 +17,8 @@ class Membros extends Model
     public function responsaveis(){
         return $this->hasMany('App\ResponsavelMembro');
     }
+
+    public function informacoesAdicionais(){
+        return $this->hasOne( 'App\InformacoesAdicionais' );
+    }
 }
