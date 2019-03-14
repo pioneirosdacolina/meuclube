@@ -26,7 +26,7 @@ class CreateInformacoesAdicionaisTable extends Migration
             $table->timestamps();
 
             $table->foreign( "membros_id")
-                ->references("membros")->on("id");
+                ->references("id")->on("membros");
         });
     }
 

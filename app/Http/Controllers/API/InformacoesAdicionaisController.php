@@ -39,7 +39,11 @@ class InformacoesAdicionaisController extends Controller
     public function show($id)
     {
         //TODO verificar acesso do usuário logado aos dados abaixos
-        return InformacoesAdicionais::findOrFail( $id );
+        $informacoes = InformacoesAdicionais::where( "membros_id", "=", $id )->first();
+
+        if( $informacoes == null ) return response()->json( [ "message" => "Data not found!" ], 404 );
+
+        return $informacoes;
     }
 
     /**
@@ -53,11 +57,11 @@ class InformacoesAdicionaisController extends Controller
     {
         // TODO adicionar persistência de dados
         // TODO remover o campo membros_id do request, para não alterar o dono da informação.
-        $informacoesadicionais =
-            InformacoesAdicionais::findOrFail( $id );
-        $informacoesadicionais->update(  $request->all() );
 
-        return $informacoesadicionais;
+        $informacoes = InformacoesAdicionais::where( "membros_id", "=", $id )->first();
+        $informacoes->update(  $request->all() );
+
+        return $informacoes;
     }
 
     /**

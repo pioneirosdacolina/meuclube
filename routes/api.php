@@ -21,7 +21,8 @@ Route::apiResources([
     'user' => 'API\UserController',
     'membro' => 'API\MembroController',
     'responsavel' => 'API\ResponsavelController',
-    'contato' => 'API\ContatoController'
+    'contato' => 'API\ContatoController',
+    'informacoesAdicionais' => 'API\InformacoesAdicionaisController',
 ]);
 
 

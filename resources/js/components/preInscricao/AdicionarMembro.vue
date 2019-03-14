@@ -307,7 +307,7 @@
 
                             <!-- /.tab-pane -->
                             <div class="tab-pane" :class="{ active: etapa === 'informacoesAdicionais' }" id="informacoesAdicionais"v-show="etapa == 'informacoesAdicionais'">
-                                <informacoes-adicionais></informacoes-adicionais>
+                                <informacoes-adicionais v-bind:membro="membro"></informacoes-adicionais>
                             </div>
                             <!-- /.tab-pane -->
 
@@ -400,7 +400,7 @@
                 this.isCadastroNovo = true;
                 this.etapa = 'dadosBasicos';
 
-                this.etapas ={ dadosBasicos: true, documentos: false, escolaridade: false, contatos: false, responsaveis: false, fichadesaude: false, documentacao: false };
+                this.etapas ={ dadosBasicos: true, documentos: false, escolaridade: false, contatos: false, responsaveis: false, informacoesAdicionais: false, fichadesaude: false, documentacao: false };
             },
             meInscrever(){
                 this.iniciarInscricao();
@@ -426,7 +426,7 @@
                 this.iniciarCadastro = true;
                 this.inscricaoPropria = membro.id == this.$gate.getId();
                 this.isCadastroNovo = false;
-                this.etapas ={ dadosBasicos: true, documentos: true, escolaridade: true, contatos: true, responsaveis: true, fichadesaude: true, documentacao: true };
+                this.etapas ={ dadosBasicos: true, documentos: true, escolaridade: true, contatos: true, responsaveis: true, informacoesAdicionais: true, fichadesaude: true, documentacao: true };
                 this.dadosBasicos.fill( membro );
                 this.carregarEscolaridade( membro );
                 this.carregarEndereco( membro );

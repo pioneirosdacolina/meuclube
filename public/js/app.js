@@ -3877,6 +3877,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         escolaridade: false,
         contatos: false,
         responsaveis: false,
+        informacoesAdicionais: false,
         fichadesaude: false,
         documentacao: false
       };
@@ -3907,6 +3908,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         escolaridade: true,
         contatos: true,
         responsaveis: true,
+        informacoesAdicionais: true,
         fichadesaude: true,
         documentacao: true
       };
@@ -4234,174 +4236,97 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['membro'],
   data: function data() {
     return {
-      membro: {},
-      responsaveis: [],
       editMode: false,
-      responsavel: new Form({
+      informacoes: new Form({
         id: '',
-        responsavels_id: 0,
-        membros_id: null,
-        parentesco: '',
-        nome: '',
-        cpf: null,
-        rg: ''
+        membros_id: '',
+        camiseta: '',
+        batizado: '',
+        religiao: '',
+        outro_clube: '',
+        nome_clube: ''
       })
     };
   },
   mounted: function mounted() {
-    var _this = this;
-
     console.log('Component mounted.');
-    Fire.$on('carregarResponsaveis', function (membro) {
-      _this.carregarResponsaveis(membro);
+    console.log({
+      component: 'InformacoesAdicionais',
+      action: "monted",
+      dados: this.membro
     });
+    this.carregarInformacoes();
+    this.informacoes.membros_id = this.membro.id;
   },
   methods: {
-    carregarResponsaveis: function carregarResponsaveis(membro) {
-      var _this2 = this;
+    atualizarInformacoes: function atualizarInformacoes() {
+      var _this = this;
 
-      this.membro = membro;
-      axios.get('/api/responsavel/' + membro.id).then(function (response, data) {
-        console.log({
-          action: 'carregarResponsaveis',
-          dados: response
-        });
-        _this2.responsaveis = response.data.data;
-      });
-    },
-    adcionarResponsavel: function adcionarResponsavel() {
-      console.log('Abre popup para adicionar novo responavel do desbravador');
-      this.editMode = false;
-      this.responsavel.clear();
-      this.responsavel.reset();
-      this.responsavel.membros_id = this.membro.id;
-      this.carregarContatos();
-      $('#adicionaResponsavelModal').modal('show');
-    },
-    editarResponsavel: function editarResponsavel(responsavel) {
-      console.log('Abre popup para editar responavel do desbravador');
-      this.responsavel.clear();
-      this.responsavel.reset();
-      this.editMode = true;
-      this.responsavel.fill(responsavel);
-      this.carregarContatos();
-      $('#adicionaResponsavelModal').modal('show');
-    },
-    carregarContatos: function carregarContatos() {
-      this.$refs.telefonesResponsavel.alterarOrigemId(this.responsavel.id);
-      this.$refs.emailsResponsavel.alterarOrigemId(this.responsavel.id);
-      this.$refs.telefonesResponsavel.carregarContatos();
-      this.$refs.emailsResponsavel.carregarContatos();
-    },
-    apagarResponsavel: function apagarResponsavel(responsavel) {
-      var _this3 = this;
-
-      console.log('TODO mensagem de alerta antes de apagar o responsável.');
-      this.responsavel.delete('/api/responsavel/' + responsavel.id).then(function (response) {
-        toast.fire('Apagado!', "Respons\xE1vel apagado com sucesso!", 'success');
-
-        _this3.carregarResponsaveis(_this3.membro);
-      }).catch(function (e) {
-        console.log(e);
-        toast.fire('Erro!', "Ocorreu um erro apagar o respons\xE1vel.", 'warning');
-      });
-    },
-    atualizarResponsavel: function atualizarResponsavel() {
-      var _this4 = this;
-
-      console.log('Atualizar responavel do desbravador');
       this.$Progress.start();
-      this.responsavel.put('/api/responsavel/' + this.responsavel.id).then(function (data) {
-        _this4.$refs.telefonesResponsavel.saveAllContatos();
+      this.informacoes.put('/api/informacoesAdicionais/' + this.membro.id).then(function (_ref) {
+        var data = _ref.data;
+        console.log(data);
+        toast.fire('Salvo!', 'Dados salvos com sucesso.', 'success');
 
-        _this4.$refs.emailsResponsavel.saveAllContatos();
-
-        _this4.sucessoNaGravacao(data);
-      }).catch(function (_ref) {
-        var e = _ref.e;
-        console.log(e);
-
-        _this4.erroNaGravacao();
-      });
-    },
-    criarResponsavel: function criarResponsavel() {
-      var _this5 = this;
-
-      console.log('Criar responavel do desbravador');
-      this.$Progress.start();
-      this.responsavel.post('/api/responsavel').then(function (data) {
-        console.log('Criado com sucesso.');
-
-        _this5.responsavel.fill(data.data);
-
-        _this5.$refs.telefonesResponsavel.alterarOrigemId(_this5.responsavel.id);
-
-        _this5.$refs.emailsResponsavel.alterarOrigemId(_this5.responsavel.id);
-
-        _this5.$refs.telefonesResponsavel.saveAllContatos();
-
-        _this5.$refs.emailsResponsavel.saveAllContatos();
-
-        _this5.sucessoNaGravacao(data);
+        _this.$Progress.finish();
       }).catch(function (_ref2) {
         var e = _ref2.e;
-        console.log(e);
+        toast.fire('Erro!', 'Ocorreu um erro ao salvar os dados. Tente novamente', 'warning');
 
-        _this5.erroNaGravacao();
+        _this.$Progress.fail();
       });
     },
-    erroNaGravacao: function erroNaGravacao() {
-      toast.fire('Erro!', "Ocorreu um erro na grava\xE7\xE3o dos dados do respons\xE1vel. Tente novamente", 'warning');
-      this.$Progress.fail();
+    criarInformacoes: function criarInformacoes() {
+      var _this2 = this;
+
+      this.$Progress.start();
+      this.informacoes.post('/api/informacoesAdicionais/').then(function (_ref3) {
+        var data = _ref3.data;
+        _this2.editMode = true;
+        toast.fire('Salvo!', 'Dados salvos com sucesso.', 'success');
+
+        _this2.$Progress.finish();
+      }).catch(function (_ref4) {
+        var e = _ref4.e;
+        _this2.editMode = false;
+        toast.fire('Erro!', 'Ocorreu um erro ao salvar os dados. Tente novamente', 'warning');
+
+        _this2.$Progress.fail();
+      });
     },
-    sucessoNaGravacao: function sucessoNaGravacao(responsavel) {
-      console.log(responsavel);
-      this.responsavel.fill(responsavel);
-      toast.fire(this.editMode ? "Atualizar respons\xE1vel!" : "Novo respons\xE1vel!", "Dados do respons\xE1vel salvos com sucesso.", 'success');
-      this.carregarResponsaveis(this.membro);
-      this.$Progress.finish();
-      $('#adicionaResponsavelModal').modal('hide');
+    carregarInformacoes: function carregarInformacoes() {
+      var _this3 = this;
+
+      this.$Progress.start();
+      axios.get('/api/informacoesAdicionais/' + this.membro.id).then(function (_ref5) {
+        var data = _ref5.data;
+        console.log(data);
+
+        _this3.informacoes.fill(data);
+
+        _this3.editMode = true;
+
+        _this3.$Progress.finish();
+      }).catch(function (_ref6) {
+        var e = _ref6.e;
+        _this3.editMode = false;
+        toast.fire('Erro!', 'Ocorreu um erro ao carregar os dados. Tente novamente', 'warning');
+
+        _this3.$Progress.fail();
+      });
     }
   },
-  created: function created() {}
+  created: function created() {
+    console.log({
+      component: 'InformacoesAdicionais',
+      action: "created",
+      dados: this.membro
+    });
+  }
 });
 
 /***/ }),
@@ -70182,7 +70107,11 @@ var render = function() {
                         },
                         attrs: { id: "informacoesAdicionais" }
                       },
-                      [_c("informacoes-adicionais")],
+                      [
+                        _c("informacoes-adicionais", {
+                          attrs: { membro: _vm.membro }
+                        })
+                      ],
                       1
                     ),
                     _vm._v(" "),
@@ -70257,461 +70186,416 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-12 mt-3" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c("h3", { staticClass: "card-title" }, [_vm._v("Responsáveis")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-tools" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-success",
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.adcionarResponsavel($event)
-                    }
-                  }
-                },
-                [
-                  _vm._v("Adicionar "),
-                  _c("i", { staticClass: "fas fa-user-plus fa-fw" })
-                ]
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body table-responsive p-0" }, [
-            _c("table", { staticClass: "table table-hover" }, [
-              _c(
-                "tbody",
-                [
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _vm._l(_vm.responsaveis, function(responsavel) {
-                    return _c("tr", { key: responsavel.id }, [
-                      _c("td", [_vm._v(_vm._s(responsavel.nome))]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          _vm._s(
-                            _vm._f("descricaoParentesco")(
-                              responsavel.parentesco
-                            )
-                          )
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "#" },
-                            on: {
-                              click: function($event) {
-                                return _vm.editarResponsavel(responsavel)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "fa fa-edit blue" })]
-                        ),
-                        _vm._v(
-                          "\n                                |\n                                "
-                        ),
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "#" },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                return _vm.apagarResponsavel(responsavel)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "fa fa-trash red" })]
-                        )
-                      ])
-                    ])
-                  })
-                ],
-                2
-              )
-            ])
-          ])
-        ])
-      ])
-    ]),
+    _c("h3", { staticClass: "card-title" }, [_vm._v("Informações Adicionais")]),
     _vm._v(" "),
     _c(
-      "div",
+      "form",
       {
-        staticClass: "modal fade",
-        attrs: {
-          id: "adicionaResponsavelModal",
-          tabindex: "-1",
-          role: "dialog",
-          "aria-labelledby": "adicionaResponsavelModalLabel",
-          "aria-hidden": "true"
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            _vm.editMode ? _vm.atualizarInformacoes() : _vm.criarInformacoes()
+          }
         }
       },
       [
         _c(
           "div",
-          {
-            staticClass: "modal-dialog modal-dialog-centered",
-            attrs: { role: "document" }
-          },
+          { staticClass: "form-group" },
           [
-            _c("div", { staticClass: "modal-content" }, [
-              _c("div", { staticClass: "modal-header" }, [
-                _c(
-                  "h5",
+            _c("label", { attrs: { for: "camiseta" } }, [_vm._v("Camiseta")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
                   {
-                    staticClass: "modal-title",
-                    attrs: { id: "adicionaResponsavelModalLabel" }
-                  },
-                  [
-                    _vm._v(
-                      _vm._s(
-                        _vm.editMode ? "Editar Responsável" : "Novo Resposável"
-                      )
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.informacoes.camiseta,
+                    expression: "informacoes.camiseta"
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalide": _vm.informacoes.errors.has("camiseta")
+                },
+                attrs: { name: "camiseta", id: "camiseta" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.informacoes,
+                      "camiseta",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
                     )
-                  ]
-                ),
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "" } }, [
+                  _vm._v("Escolha um Tamanho")
+                ]),
                 _vm._v(" "),
-                _vm._m(1)
+                _c("option", { attrs: { value: "GI" } }, [_vm._v("GI")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "PPA" } }, [_vm._v("PPA")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "PA" } }, [_vm._v("PA")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "MA" } }, [_vm._v("MA")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "GA" } }, [_vm._v("GA")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "GGA" } }, [_vm._v("GGA")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "3G" } }, [_vm._v("3G")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "4G" } }, [_vm._v("4G")])
+              ]
+            ),
+            _vm._v(" "),
+            _c("has-error", {
+              attrs: { form: _vm.informacoes, field: "camiseta" }
+            })
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "batizadoSim" } }, [_vm._v("Batizado")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "mx-auto", staticStyle: { width: "100%" } },
+            [
+              _c("div", { staticClass: "form-check form-check-inline" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.informacoes.batizado,
+                      expression: "informacoes.batizado"
+                    }
+                  ],
+                  staticClass: "form-check-input",
+                  staticStyle: { width: "0px" },
+                  attrs: {
+                    type: "radio",
+                    name: "batizadoRadioOptions",
+                    id: "batizadoSim",
+                    value: "SIM"
+                  },
+                  domProps: {
+                    checked: _vm._q(_vm.informacoes.batizado, "SIM")
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.$set(_vm.informacoes, "batizado", "SIM")
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "btn",
+                    class: {
+                      "btn-light": _vm.informacoes.batizado != "SIM",
+                      "btn-dark": _vm.informacoes.batizado == "SIM",
+                      "is-invalid": _vm.informacoes.errors.has("batizado")
+                    },
+                    attrs: { for: "batizadoSim" }
+                  },
+                  [_vm._v("SIM")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check form-check-inline" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.informacoes.batizado,
+                      expression: "informacoes.batizado"
+                    }
+                  ],
+                  staticClass: "form-check-input",
+                  staticStyle: { width: "0px" },
+                  attrs: {
+                    type: "radio",
+                    name: "batizadoRadioOptions",
+                    id: "batizadoNao",
+                    value: "NAO"
+                  },
+                  domProps: {
+                    checked: _vm._q(_vm.informacoes.batizado, "NAO")
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.$set(_vm.informacoes, "batizado", "NAO")
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "btn",
+                    class: {
+                      "btn-light": _vm.informacoes.batizado != "NAO",
+                      "btn-dark": _vm.informacoes.batizado == "NAO",
+                      "is-invalid": _vm.informacoes.errors.has("batizado")
+                    },
+                    attrs: { for: "batizadoNao" }
+                  },
+                  [_vm._v("NÃO")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("has-error", {
+                attrs: { form: _vm.informacoes, field: "batizado" }
+              })
+            ],
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "religiao" } }, [_vm._v("Religião")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-sm-10" },
+            [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.informacoes.religiao,
+                    expression: "informacoes.religiao"
+                  }
+                ],
+                staticClass: "form-control",
+                class: { "is-invalid": _vm.informacoes.errors.has("religiao") },
+                attrs: {
+                  type: "text",
+                  id: "religiao",
+                  placeholder: "Religião"
+                },
+                domProps: { value: _vm.informacoes.religiao },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.informacoes, "religiao", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("has-error", {
+                attrs: { form: _vm.informacoes, field: "religiao" }
+              })
+            ],
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "transferenciaSim" } }, [
+            _vm._v("Veio de Outro Clube")
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "mx-auto", staticStyle: { width: "100%" } },
+            [
+              _c("div", { staticClass: "form-check form-check-inline" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.informacoes.outro_clube,
+                      expression: "informacoes.outro_clube"
+                    }
+                  ],
+                  staticClass: "form-check-input",
+                  staticStyle: { width: "0px" },
+                  attrs: {
+                    type: "radio",
+                    name: "outro_clubeRadioOptions",
+                    id: "outro_clubeSim",
+                    value: "SIM"
+                  },
+                  domProps: {
+                    checked: _vm._q(_vm.informacoes.outro_clube, "SIM")
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.$set(_vm.informacoes, "outro_clube", "SIM")
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "btn",
+                    class: {
+                      "btn-light": _vm.informacoes.outro_clube != "SIM",
+                      "btn-dark": _vm.informacoes.outro_clube == "SIM",
+                      "is-invalid": _vm.informacoes.errors.has("outro_clube")
+                    },
+                    attrs: { for: "outro_clubeSim" }
+                  },
+                  [_vm._v("SIM")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check form-check-inline" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.informacoes.outro_clube,
+                      expression: "informacoes.outro_clube"
+                    }
+                  ],
+                  staticClass: "form-check-input",
+                  staticStyle: { width: "0px" },
+                  attrs: {
+                    type: "radio",
+                    name: "outro_clubeRadioOptions",
+                    id: "outro_clubeNao",
+                    value: "NAO"
+                  },
+                  domProps: {
+                    checked: _vm._q(_vm.informacoes.outro_clube, "NAO")
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.$set(_vm.informacoes, "outro_clube", "NAO")
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "btn",
+                    class: {
+                      "btn-light": _vm.informacoes.outro_clube != "NAO",
+                      "btn-dark": _vm.informacoes.outro_clube == "NAO",
+                      "is-invalid": _vm.informacoes.errors.has("outro_clube")
+                    },
+                    attrs: { for: "outro_clubeNao" }
+                  },
+                  [_vm._v("NÃO")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("has-error", {
+                attrs: { form: _vm.informacoes, field: "outro_clube" }
+              })
+            ],
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _vm.informacoes.outro_clube == "SIM"
+          ? _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "nome_clube" } }, [
+                _vm._v("Nome do outro clube")
               ]),
               _vm._v(" "),
               _c(
-                "form",
-                {
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      _vm.editMode
-                        ? _vm.atualizarResponsavel()
-                        : _vm.criarResponsavel()
-                    }
-                  }
-                },
+                "div",
+                { staticClass: "col-sm-10" },
                 [
-                  _c(
-                    "div",
-                    { staticClass: "modal-body" },
-                    [
-                      _c(
-                        "div",
-                        { staticClass: "form-group" },
-                        [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.responsavel.nome,
-                                expression: "responsavel.nome"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              "is-invalid": _vm.responsavel.errors.has("nome")
-                            },
-                            attrs: {
-                              type: "text",
-                              name: "name",
-                              placeholder: "Nome"
-                            },
-                            domProps: { value: _vm.responsavel.nome },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.responsavel,
-                                  "nome",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("has-error", {
-                            attrs: {
-                              form: _vm.responsavel,
-                              field: "parentesco"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "form-group" },
-                        [
-                          _c("the-mask", {
-                            staticClass: "form-control",
-                            class: {
-                              "is-invalid": _vm.responsavel.errors.has("cpf")
-                            },
-                            attrs: {
-                              mask: ["###.###.###-##"],
-                              id: "cpfResponsavel",
-                              placeholder: "CPF"
-                            },
-                            model: {
-                              value: _vm.responsavel.cpf,
-                              callback: function($$v) {
-                                _vm.$set(_vm.responsavel, "cpf", $$v)
-                              },
-                              expression: "responsavel.cpf"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("has-error", {
-                            attrs: { form: _vm.responsavel, field: "cpf" }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "form-group" },
-                        [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.responsavel.rg,
-                                expression: "responsavel.rg"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              "is-invalid": _vm.responsavel.errors.has("rg")
-                            },
-                            attrs: {
-                              type: "text",
-                              id: "rgResponsavel",
-                              placeholder: "RG"
-                            },
-                            domProps: { value: _vm.responsavel.rg },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.responsavel,
-                                  "rg",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("has-error", {
-                            attrs: { form: _vm.responsavel, field: "rg" }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "form-group" },
-                        [
-                          _c(
-                            "select",
-                            {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.responsavel.parentesco,
-                                  expression: "responsavel.parentesco"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              class: {
-                                "is-invalide": _vm.responsavel.errors.has(
-                                  "parentesco"
-                                )
-                              },
-                              attrs: { name: "type", id: "type" },
-                              on: {
-                                change: function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.$set(
-                                    _vm.responsavel,
-                                    "parentesco",
-                                    $event.target.multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
-                                  )
-                                }
-                              }
-                            },
-                            [
-                              _c("option", { attrs: { value: "" } }, [
-                                _vm._v("Parentesco")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "pai" } }, [
-                                _vm._v("Pai")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "mae" } }, [
-                                _vm._v("Mãe")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "a_avo" } }, [
-                                _vm._v("Avó")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "o_avo" } }, [
-                                _vm._v("Avô")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "tio" } }, [
-                                _vm._v("Tio")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "tia" } }, [
-                                _vm._v("Tia")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "padastro" } }, [
-                                _vm._v("Padastro")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "madastra" } }, [
-                                _vm._v("Madastra")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "outros" } }, [
-                                _vm._v("Outros")
-                              ])
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("has-error", {
-                            attrs: {
-                              form: _vm.responsavel,
-                              field: "parentesco"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("contatos", {
-                        ref: "telefonesResponsavel",
-                        attrs: {
-                          title: "Telefones",
-                          tipo: "telefone",
-                          origem: "responsavel"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("contatos", {
-                        ref: "emailsResponsavel",
-                        attrs: {
-                          title: "E-mails",
-                          tipo: "email",
-                          origem: "responsavel"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "modal-footer" }, [
-                    _c(
-                      "button",
+                  _c("input", {
+                    directives: [
                       {
-                        staticClass: "btn btn-danger",
-                        attrs: { type: "button", "data-dismiss": "modal" }
-                      },
-                      [_vm._v("Cancelar")]
-                    ),
-                    _vm._v(" "),
-                    _vm.editMode
-                      ? _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-success",
-                            attrs: { type: "submit" }
-                          },
-                          [_vm._v("Atualizar")]
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.informacoes.nome_clube,
+                        expression: "informacoes.nome_clube"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.informacoes.errors.has("nome_clube")
+                    },
+                    attrs: {
+                      type: "text",
+                      id: "nome_clube",
+                      placeholder: "Nome do clube"
+                    },
+                    domProps: { value: _vm.informacoes.nome_clube },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.informacoes,
+                          "nome_clube",
+                          $event.target.value
                         )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    !_vm.editMode
-                      ? _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-primary",
-                            attrs: { type: "submit" }
-                          },
-                          [_vm._v("Salvar")]
-                        )
-                      : _vm._e()
-                  ])
-                ]
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("has-error", {
+                    attrs: { form: _vm.informacoes, field: "nome_clube" }
+                  })
+                ],
+                1
               )
             ])
-          ]
-        )
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-danger",
+            attrs: { type: "button", "data-dismiss": "modal" }
+          },
+          [_vm._v("Cancelar")]
+        ),
+        _vm._v(" "),
+        _vm.editMode
+          ? _c(
+              "button",
+              { staticClass: "btn btn-success", attrs: { type: "submit" } },
+              [_vm._v("Atualizar")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        !_vm.editMode
+          ? _c(
+              "button",
+              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+              [_vm._v("Salvar")]
+            )
+          : _vm._e()
       ]
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("th", [_vm._v("Nome")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("Grau Parentesco")]),
-      _vm._v(" "),
-      _c("th")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "close",
-        attrs: {
-          type: "button",
-          "data-dismiss": "modal",
-          "aria-label": "Close"
-        }
-      },
-      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
